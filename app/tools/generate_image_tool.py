@@ -1,4 +1,9 @@
 """Compute-only image generation tool - returns data, no artifact saving."""
+from dotenv import load_dotenv
+
+# Load environment variables FIRST
+load_dotenv()
+
 import os
 import base64
 import uuid
@@ -11,8 +16,9 @@ from google.adk.tools import FunctionTool
 
 # Configure Gemini API
 api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
-if api_key:
-    genai.configure(api_key=api_key)
+if not api_key:
+    raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY environment variable must be set")
+genai.configure(api_key=api_key)
 
 # Create uploads directory
 UPLOAD_DIR = "uploads"
